@@ -4,23 +4,27 @@ class QuoteMachine extends Component {
     constructor() {
         super();
         this.state = {
-            statement: '',
-            hasQuote: false
+            quote: {
+                statement: ''
+            },
+            hasQuote: false,
         }
         this.EndPoint = 'https://wisdom-from-benet.herokuapp.com/quotes'
         this.getRandomQuote = this.getRandomQuote.bind(this);
     }
 
-    getRandomQuote = (data) => {
+    getRandomQuote = () => {
         fetch(this.EndPoint)
          .then(response => response.json())
          .then(data => {
              console.log(data);
-            if(data.statement) {
-                let { statement } = this.state;
-                this.setState({ statement }, () => {
+            if(data[0].statement) {
+                let { quote } = this.state;
+                let quoteData = data[0];
+                quote.statement = quoteData.statement;
+                this.setState({ quote }, () => {
                     if(this.state.hasQuote === false) {
-                        this.setState({ hasQuote: true, statement: data.statement })
+                        this.setState({ hasQuote: true })
                     }
                 })
             } 
@@ -31,10 +35,10 @@ class QuoteMachine extends Component {
     }
 
     renderQuote = () => {
-        const { statement } = this.state.statement;
+        const { statement } = this.state.quote;
         return (
             <div>
-              <h1>{statement}</h1>
+              <h1>"{statement}"</h1>
             </div>
         )
     }
@@ -49,7 +53,7 @@ class QuoteMachine extends Component {
                 <h2>{this.state.statement}</h2>
                 <button onClick={this.getRandomQuote}>Click for wisdom from Benet</button>
                 <br />
-                {hasQuote === true ? this.state.statement : ''}
+                {hasQuote === true ? this.renderQuote() : ''}
             </Fragment>
         )
     }
