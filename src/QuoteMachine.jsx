@@ -18,9 +18,10 @@ class QuoteMachine extends Component {
          .then(response => response.json())
          .then(data => {
              console.log(data);
-            if(data[0].statement) {
+             const randomIndex = Math.floor(Math.random() * 52);
+            if(data[randomIndex].statement) {
                 let { quote } = this.state;
-                let quoteData = data[0];
+                let quoteData = data[randomIndex];
                 quote.statement = quoteData.statement;
                 this.setState({ quote }, () => {
                     if(this.state.hasQuote === false) {
